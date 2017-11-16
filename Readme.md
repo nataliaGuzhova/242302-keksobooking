@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Natalia Guzhova](https://up.htmlacademy.ru/javascript/11/user/242302).
-* Наставник: `Неизвестно`.
+* Наставник: [Екатерина Кащенко].
 
 ---
 
