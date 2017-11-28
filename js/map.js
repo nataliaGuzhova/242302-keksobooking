@@ -9,58 +9,65 @@ map.classList.remove('map--faded');
 createMapPins(ads);
 
 var mapCardTemplate = document.querySelector('template').content.querySelector('.map__card');
-createCardsAd(ads);
+createCardAd(ads[getRandom(0, ads.length - 1)], map);
 
-function createCardsAd(ads) {    
+function createCardAd(ad, canvas) {  
     var fragment = document.createDocumentFragment();
-    var map = document.querySelector('.map');
     var beforeElement = document.querySelector('.map__filters-container');
     
-    for (var i = 0; i < ads.length; i++) {
-        fragment.appendChild(renderCardAd(ads[i], mapCardTemplate));
-    }
-
-    map.insertBefore(fragment, beforeElement);
-    // [В] Не понимаю в чем ошибка, fragment приходит с измененными значениями, но после вставки все обнуляется и отображается шаблонное. ПОЧЕМУ????
+    fragment.appendChild(renderCardAd(ad, mapCardTemplate));    
+    canvas.insertBefore(fragment, beforeElement);
 }
 
 function renderCardAd(ad, mapCardTemplate) {
   var mapCardElement = mapCardTemplate.cloneNode(true);
 
-  mapCardElement.querySelector('h3').TextContent = ad.offer.title;
-  mapCardElement.querySelector('small').TextContent = ad.offer.address;
-  mapCardElement.querySelector('.popup__price').TextContent = ad.offer.price.toString + '&#x20bd;/ночь';
-  mapCardElement.querySelector('h4').TextContent = translateType(ad.offer.type);
-  mapCardElement.querySelector('h4 + p').TextContent = ad.offer.rooms.toString + ' комнаты для ' + ad.offer.guests.toString + ' гостей';
-  mapCardElement.querySelector('h4 ~ p').TextContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
+  mapCardElement.querySelector('h3').textContent = ad.offer.title;
+  mapCardElement.querySelector('small').textContent = ad.offer.address;
+  mapCardElement.querySelector('.popup__price').textContent = ad.offer.price.toString() + String.fromCharCode(8381) + '/ночь';
+  mapCardElement.querySelector('h4').textContent = translateType(ad.offer.type);
+  mapCardElement.querySelector('h4 + p').textContent = ad.offer.rooms.toString() + ' комнаты для ' + ad.offer.guests.toString() + ' гостей';
+  mapCardElement.querySelector('h4 + p + p').textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
   
-//   var list = mapCardElement.querySelectorAll('.feature');
-//   for (var j=0; j < list.length; j++)
-//   {list[j].classList.add('hidden');}
-//   for (var i = 0; i < ad.offer.features.length; i++) {
-//     switch(ad.offer.features[i]) {
-//     case 'wifi':
-//       mapCardElement.querySelector('.feature--wifi').classList.remove('hidden');
-//       break;
-//     case 'dishwasher':
-//       mapCardElement.querySelector('.feature--dishwasher').classList.remove('hidden');
-//       break;
-//     case 'parking':
-//       mapCardElement.querySelector('.feature--parking').classList.remove('hidden');
-//       break;
-//     case 'washer':
-//       mapCardElement.querySelector('.feature--washer').classList.remove('hidden');
-//       break;
-//     case 'elevator':
-//       mapCardElement.querySelector('.feature--elevator').classList.remove('hidden');
-//       break;
-//     case 'conditioner':
-//       mapCardElement.querySelector('.feature--conditioner').classList.remove('hidden');
-//       break;
-//     default: 
-//       mapCardElement.querySelector('.feature').classList.add('hidden');
-//     }
-//   }
+  var list = mapCardElement.querySelectorAll('.feature');
+  var liElement = document.createElement('li');
+  liElement.classList.add('.features');
+
+  for(var i = 0; i < list.length; i++) {
+  mapCardElement.querySelector('.popup__features').removeChild(list[i]); 
+}
+
+ for (var i = 0; i < ad.offer.features.length; i++) {
+    var liElement = document.createElement('li');
+    liElement.classList.add('feature');
+
+    switch(ad.offer.features[i]) {
+      case 'wifi':
+        liElement.classList.add('feature--wifi');
+        mapCardElement.querySelector('.popup__features').appendChild(liElement);      
+        break;
+      case 'dishwasher':
+        liElement.classList.add('feature--dishwasher');
+        mapCardElement.querySelector('.popup__features').appendChild(liElement);    
+        break;
+      case 'parking':
+        liElement.classList.add('feature--parking');
+        mapCardElement.querySelector('.popup__features').appendChild(liElement);    
+        break;
+      case 'washer':
+        liElement.classList.add('feature--washer');
+        mapCardElement.querySelector('.popup__features').appendChild(liElement);    
+        break;
+      case 'elevator':
+        liElement.classList.add('feature--elevator');
+        mapCardElement.querySelector('.popup__features').appendChild(liElement);
+        break;
+      case 'conditioner':
+        liElement.classList.add('feature--conditioner');
+        mapCardElement.querySelector('.popup__features').appendChild(liElement);
+        break;
+    }
+  }
 
   mapCardElement.querySelector('ul + p').TextContent = ad.offer.description;
   mapCardElement.querySelector('.popup__avatar').src = ad.author.avatar;
@@ -154,12 +161,12 @@ function getFeatures () {
     return selectFeatures;
 }
 
-  function getTitle(i) {
+  function getTitle() {
     var titles = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 
     'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 
     'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 
-    return titles[i];
+    return titles[getRandom(0, titles.length - 1)];
   }
 
   function getPrice() {
@@ -179,17 +186,17 @@ function getFeatures () {
 
   function translateType(type) {
     var types = ['Квартира', 'Дом', 'Бунгало'];
-    var value = 'неизвестно';
+    var value = '';
 
     switch(type) {
       case 'flat': 
-        value =  types[1];
+        value =  types[0];
         break;
       case 'house': 
-        value =  types[2];
+        value =  types[1];
         break;
       case 'bungalo': 
-        value =  types[3];
+        value =  types[2];
         break;
     }
 
@@ -205,9 +212,9 @@ function getFeatures () {
 
   function getGuests() {
     var minGuests = 1;
-    var minGuests = 100;
+    var maxGuests = 100;
 
-    return getRandom(minGuests, minGuests);
+    return getRandom(minGuests, maxGuests);
   }
 
   function getChecks() {
