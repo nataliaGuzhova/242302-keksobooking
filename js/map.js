@@ -19,8 +19,8 @@ function createCardAd(ad, canvas) {
   canvas.insertBefore(fragment, beforeElement);
 }
 
-function renderCardAd(ad, сardTemplate) {
-  var mapCardElement = сardTemplate.cloneNode(true);
+function renderCardAd(ad, mapCardTemplate) {
+  var сardTemplate = mapCardTemplate.cloneNode(true);
 
   сardTemplate.querySelector('h3').textContent = ad.offer.title;
   сardTemplate.querySelector('small').textContent = ad.offer.address;
@@ -31,8 +31,8 @@ function renderCardAd(ad, сardTemplate) {
 
   var list = сardTemplate.querySelectorAll('.feature');
 
-  for (var i = 0; i < list.length; i++) {
-    сardTemplate.querySelector('.popup__features').removeChild(list[i]);
+  for (var j = 0; j < list.length; j++) {
+    сardTemplate.querySelector('.popup__features').removeChild(list[j]);
   }
 
   for (var i = 0; i < ad.offer.features.length; i++) {
@@ -42,19 +42,19 @@ function renderCardAd(ad, сardTemplate) {
     switch (ad.offer.features[i]) {
       case 'wifi':
         liElement.classList.add('feature--wifi');
-        сardTemplate.querySelector('.popup__features').appendChild(liElement);      
+        сardTemplate.querySelector('.popup__features').appendChild(liElement);   
         break;
       case 'dishwasher':
         liElement.classList.add('feature--dishwasher');
-        сardTemplate.querySelector('.popup__features').appendChild(liElement);    
+        сardTemplate.querySelector('.popup__features').appendChild(liElement); 
         break;
       case 'parking':
         liElement.classList.add('feature--parking');
-        сardTemplate.querySelector('.popup__features').appendChild(liElement);    
+        сardTemplate.querySelector('.popup__features').appendChild(liElement);
         break;
       case 'washer':
         liElement.classList.add('feature--washer');
-        сardTemplate.querySelector('.popup__features').appendChild(liElement);    
+        сardTemplate.querySelector('.popup__features').appendChild(liElement);
         break;
       case 'elevator':
         liElement.classList.add('feature--elevator');
@@ -70,40 +70,40 @@ function renderCardAd(ad, сardTemplate) {
   сardTemplate.querySelector('ul + p').TextContent = ad.offer.description;
   сardTemplate.querySelector('.popup__avatar').src = ad.author.avatar;
 
-  return сardTemplate;  
+  return сardTemplate;
 }
 
 function createMapPins(ads) {
   var canvas = document.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
-  
+
   for (var i = 0; i < ads.length; i++) {
-      fragment.appendChild(renderMapPin(ads[i]));
+    fragment.appendChild(renderMapPin(ads[i]));
   }
-  
+
   canvas.appendChild(fragment);
 }
 
 function renderMapPin(ad) {
-    var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
-    var mapPinElement = mapPinTemplate.cloneNode(true);
-    
-    mapPinElement.style.left = ad.location.x.toString() + 'px';
-    mapPinElement.style.top = ad.location.y.toString() + 'px';
-    
-    mapPinElement.querySelector('img').src = ad.author.avatar;
+  var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
+  var mapPinElement = mapPinTemplate.cloneNode(true);
+
+  mapPinElement.style.left = ad.location.x.toString() + 'px';
+  mapPinElement.style.top = ad.location.y.toString() + 'px';
   
-    return mapPinElement;
+  mapPinElement.querySelector('img').src = ad.author.avatar;
+
+  return mapPinElement;
+}
+
+function createArrAds(numbAds) {
+  var ads = [];
+
+  for (var i = 0; i < numbAds; i++) {  
+    ads[i] = createAd(i);
   }
 
-function createArrAds(numbAds) {    
-    var ads = [];
-    
-    for (var i = 0; i < numbAds; i++) {  
-      ads[i] = createAd(i);
-    }
-
-    return ads;
+  return ads;
 }
 
 function createAd(i) {
@@ -117,8 +117,8 @@ function createAd(i) {
       'avatar': getAvatar(i),
     },
     'location': {
-      'x': getLocation (minX, maxX),
-      'y': getLocation (minY, maxY),
+      'x': getLocation(minX, maxX),
+      'y': getLocation(minY, maxY),
     },
     'offer': {
       'title': getTitle(i),
@@ -131,37 +131,35 @@ function createAd(i) {
       'features': getFeatures(),
       'description': '',
       'photos': []
-    },  
+    },
   };
-    
+
   ad.offer.address = ad.location.x + ',' + ad.location.y;
 
   return ad;
 }
 
 function getRandom(min, max) {
-    
-    return Math.floor(Math.random() * (max + 1 - min)) + min;;
+
+  return Math.floor(Math.random() * (max + 1 - min)) + min;
 }
 
 function getAvatar(i) {
-  var src = 'img/avatars/user' + '0' + (i+1).toString() + '.png';
+  var src = 'img/avatars/user' + '0' + (i + 1).toString() + '.png';
 
   return src;
 }
 
 function getFeatures() {
-    var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-    var numb = getRandom(0, features.length);
-    var selectFeatures = features.slice(numb);
+  var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+  var numb = getRandom(0, features.length);
+  var selectFeatures = features.slice(numb);
 
-    return selectFeatures;
+  return selectFeatures;
 }
 
 function getTitle() {
-  var titles = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 
-  'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 
-  'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
+  var titles = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 
   return titles[getRandom(0, titles.length - 1)];
 }
@@ -185,15 +183,15 @@ function translateType(type) {
   var types = ['Квартира', 'Дом', 'Бунгало'];
   var value = '';
 
-  switch(type) {
+  switch (type) {
     case 'flat': 
-      value =  types[0];
+      value = types[0];
       break;
     case 'house': 
-      value =  types[1];
+      value = types[1];
       break;
     case 'bungalo': 
-      value =  types[2];
+      value = types[2];
       break;
   }
 
