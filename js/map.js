@@ -14,66 +14,63 @@ createCardAd(ads[getRandom(0, ads.length - 1)], map);
 function createCardAd(ad, canvas) {
   var fragment = document.createDocumentFragment();
   var beforeElement = document.querySelector('.map__filters-container');
- 
+
   fragment.appendChild(renderCardAd(ad, mapCardTemplate));
   canvas.insertBefore(fragment, beforeElement);
 }
 
-function renderCardAd(ad, mapCardTemplate) {
-  var mapCardElement = mapCardTemplate.cloneNode(true);
+function renderCardAd(ad, сardTemplate) {
+  var mapCardElement = сardTemplate.cloneNode(true);
 
-  mapCardElement.querySelector('h3').textContent = ad.offer.title;
-  mapCardElement.querySelector('small').textContent = ad.offer.address;
-  mapCardElement.querySelector('.popup__price').textContent = ad.offer.price.toString() + String.fromCharCode(8381) + '/ночь';
-  mapCardElement.querySelector('h4').textContent = translateType(ad.offer.type);
-  mapCardElement.querySelector('h4 + p').textContent = ad.offer.rooms.toString() + ' комнаты для ' + ad.offer.guests.toString() + ' гостей';
-  mapCardElement.querySelector('h4 + p + p').textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
+  сardTemplate.querySelector('h3').textContent = ad.offer.title;
+  сardTemplate.querySelector('small').textContent = ad.offer.address;
+  сardTemplate.querySelector('.popup__price').textContent = ad.offer.price.toString() + String.fromCharCode(8381) + '/ночь';
+  сardTemplate.querySelector('h4').textContent = translateType(ad.offer.type);
+  сardTemplate.querySelector('h4 + p').textContent = ad.offer.rooms.toString() + ' комнаты для ' + ad.offer.guests.toString() + ' гостей';
+  сardTemplate.querySelector('h4 + p + p').textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
 
-  var list = mapCardElement.querySelectorAll('.feature');
-  var liElement = document.createElement('li');
-  liElement.classList.add('.features');
+  var list = сardTemplate.querySelectorAll('.feature');
 
   for (var i = 0; i < list.length; i++) {
-  mapCardElement.querySelector('.popup__features').removeChild(list[i]);
+    сardTemplate.querySelector('.popup__features').removeChild(list[i]);
   }
 
   for (var i = 0; i < ad.offer.features.length; i++) {
     var liElement = document.createElement('li');
     liElement.classList.add('feature');
 
-    switch(ad.offer.features[i]) {
+    switch (ad.offer.features[i]) {
       case 'wifi':
         liElement.classList.add('feature--wifi');
-        mapCardElement.querySelector('.popup__features').appendChild(liElement);      
+        сardTemplate.querySelector('.popup__features').appendChild(liElement);      
         break;
       case 'dishwasher':
         liElement.classList.add('feature--dishwasher');
-        mapCardElement.querySelector('.popup__features').appendChild(liElement);    
+        сardTemplate.querySelector('.popup__features').appendChild(liElement);    
         break;
       case 'parking':
         liElement.classList.add('feature--parking');
-        mapCardElement.querySelector('.popup__features').appendChild(liElement);    
+        сardTemplate.querySelector('.popup__features').appendChild(liElement);    
         break;
       case 'washer':
         liElement.classList.add('feature--washer');
-        mapCardElement.querySelector('.popup__features').appendChild(liElement);    
+        сardTemplate.querySelector('.popup__features').appendChild(liElement);    
         break;
       case 'elevator':
         liElement.classList.add('feature--elevator');
-        mapCardElement.querySelector('.popup__features').appendChild(liElement);
+        сardTemplate.querySelector('.popup__features').appendChild(liElement);
         break;
       case 'conditioner':
         liElement.classList.add('feature--conditioner');
-        mapCardElement.querySelector('.popup__features').appendChild(liElement);
+        сardTemplate.querySelector('.popup__features').appendChild(liElement);
         break;
     }
   }
 
-  mapCardElement.querySelector('ul + p').TextContent = ad.offer.description;
-  mapCardElement.querySelector('.popup__avatar').src = ad.author.avatar;
+  сardTemplate.querySelector('ul + p').TextContent = ad.offer.description;
+  сardTemplate.querySelector('.popup__avatar').src = ad.author.avatar;
 
-  return mapCardElement;
-  
+  return сardTemplate;  
 }
 
 function createMapPins(ads) {
