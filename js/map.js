@@ -11,12 +11,12 @@ createMapPins(ads);
 var mapCardTemplate = document.querySelector('template').content.querySelector('.map__card');
 createCardAd(ads[getRandom(0, ads.length - 1)], map);
 
-function createCardAd(ad, canvas) {  
-    var fragment = document.createDocumentFragment();
-    var beforeElement = document.querySelector('.map__filters-container');
-    
-    fragment.appendChild(renderCardAd(ad, mapCardTemplate));    
-    canvas.insertBefore(fragment, beforeElement);
+function createCardAd(ad, canvas) {
+  var fragment = document.createDocumentFragment();
+  var beforeElement = document.querySelector('.map__filters-container');
+ 
+  fragment.appendChild(renderCardAd(ad, mapCardTemplate));
+  canvas.insertBefore(fragment, beforeElement);
 }
 
 function renderCardAd(ad, mapCardTemplate) {
@@ -28,16 +28,16 @@ function renderCardAd(ad, mapCardTemplate) {
   mapCardElement.querySelector('h4').textContent = translateType(ad.offer.type);
   mapCardElement.querySelector('h4 + p').textContent = ad.offer.rooms.toString() + ' комнаты для ' + ad.offer.guests.toString() + ' гостей';
   mapCardElement.querySelector('h4 + p + p').textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
-  
+
   var list = mapCardElement.querySelectorAll('.feature');
   var liElement = document.createElement('li');
   liElement.classList.add('.features');
 
-  for(var i = 0; i < list.length; i++) {
-  mapCardElement.querySelector('.popup__features').removeChild(list[i]); 
-}
+  for (var i = 0; i < list.length; i++) {
+  mapCardElement.querySelector('.popup__features').removeChild(list[i]);
+  }
 
- for (var i = 0; i < ad.offer.features.length; i++) {
+  for (var i = 0; i < ad.offer.features.length; i++) {
     var liElement = document.createElement('li');
     liElement.classList.add('feature');
 
@@ -153,7 +153,7 @@ function getAvatar(i) {
   return src;
 }
 
-function getFeatures () {
+function getFeatures() {
     var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
     var numb = getRandom(0, features.length);
     var selectFeatures = features.slice(numb);
@@ -161,70 +161,70 @@ function getFeatures () {
     return selectFeatures;
 }
 
-  function getTitle() {
-    var titles = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 
-    'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 
-    'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
+function getTitle() {
+  var titles = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 
+  'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 
+  'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 
-    return titles[getRandom(0, titles.length - 1)];
+  return titles[getRandom(0, titles.length - 1)];
+}
+
+function getPrice() {
+  var maxPrice = 1000000;
+  var minPrice = 1000;
+
+  return getRandom(minPrice, maxPrice);
+}
+
+function getType() {
+  var types = ['flat', 'house', 'bungalo'];
+  var numbTypes = types.length - 1;
+  var type = types[getRandom(0, numbTypes)];
+
+  return type;
+}
+
+function translateType(type) {
+  var types = ['Квартира', 'Дом', 'Бунгало'];
+  var value = '';
+
+  switch(type) {
+    case 'flat': 
+      value =  types[0];
+      break;
+    case 'house': 
+      value =  types[1];
+      break;
+    case 'bungalo': 
+      value =  types[2];
+      break;
   }
 
-  function getPrice() {
-    var maxPrice = 1000000;
-    var minPrice = 1000;
+  return value;
+}
 
-    return getRandom(minPrice, maxPrice);
-  }
+function getRooms() {
+  var maxRooms = 5;
+  var minRooms = 0;
 
-  function getType() {
-    var types = ['flat', 'house', 'bungalo'];
-    var numbTypes = types.length - 1;
-    var type = types[getRandom(0, numbTypes)];
+  return getRandom(minRooms, maxRooms);
+}
 
-    return type;
-  }
+function getGuests() {
+  var minGuests = 1;
+  var maxGuests = 100;
 
-  function translateType(type) {
-    var types = ['Квартира', 'Дом', 'Бунгало'];
-    var value = '';
+  return getRandom(minGuests, maxGuests);
+}
 
-    switch(type) {
-      case 'flat': 
-        value =  types[0];
-        break;
-      case 'house': 
-        value =  types[1];
-        break;
-      case 'bungalo': 
-        value =  types[2];
-        break;
-    }
+function getChecks() {
+  var checks = ['12:00', '13:00', '14:00'];
+  var maxVal = checks.length - 1;
+  var checkTime = checks[getRandom(0, maxVal)];
 
-    return value;
-  }
+  return checkTime;
+}
 
-  function getRooms() {
-    var maxRooms = 5;
-    var minRooms = 0;
-
-    return getRandom(minRooms, maxRooms);
-  }
-
-  function getGuests() {
-    var minGuests = 1;
-    var maxGuests = 100;
-
-    return getRandom(minGuests, maxGuests);
-  }
-
-  function getChecks() {
-    var checks = ['12:00', '13:00', '14:00'];
-    var maxVal = checks.length - 1;
-    var checkTime = checks[getRandom(0, maxVal)];
-
-    return checkTime;
-  }
-
-  function getLocation (min, max) {
-      return getRandom(min, max);
-  }
+function getLocation (min, max) {
+  return getRandom(min, max);
+}
