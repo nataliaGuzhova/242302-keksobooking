@@ -19,8 +19,8 @@ function createCardAd(ad, canvas) {
   canvas.insertBefore(fragment, beforeElement);
 }
 
-function renderCardAd(ad, mapCardTemplate) {
-  var сardTemplate = mapCardTemplate.cloneNode(true);
+function renderCardAd(ad, template) {
+  var сardTemplate = template.cloneNode(true);
 
   сardTemplate.querySelector('h3').textContent = ad.offer.title;
   сardTemplate.querySelector('small').textContent = ad.offer.address;
@@ -42,11 +42,11 @@ function renderCardAd(ad, mapCardTemplate) {
     switch (ad.offer.features[i]) {
       case 'wifi':
         liElement.classList.add('feature--wifi');
-        сardTemplate.querySelector('.popup__features').appendChild(liElement);   
+        сardTemplate.querySelector('.popup__features').appendChild(liElement);
         break;
       case 'dishwasher':
         liElement.classList.add('feature--dishwasher');
-        сardTemplate.querySelector('.popup__features').appendChild(liElement); 
+        сardTemplate.querySelector('.popup__features').appendChild(liElement);
         break;
       case 'parking':
         liElement.classList.add('feature--parking');
@@ -73,12 +73,12 @@ function renderCardAd(ad, mapCardTemplate) {
   return сardTemplate;
 }
 
-function createMapPins(ads) {
+function createMapPins(arrAds) {
   var canvas = document.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
 
-  for (var i = 0; i < ads.length; i++) {
-    fragment.appendChild(renderMapPin(ads[i]));
+  for (var i = 0; i < arrAds.length; i++) {
+    fragment.appendChild(renderMapPin(arrAds[i]));
   }
 
   canvas.appendChild(fragment);
@@ -90,20 +90,20 @@ function renderMapPin(ad) {
 
   mapPinElement.style.left = ad.location.x.toString() + 'px';
   mapPinElement.style.top = ad.location.y.toString() + 'px';
-  
+
   mapPinElement.querySelector('img').src = ad.author.avatar;
 
   return mapPinElement;
 }
 
-function createArrAds(numbAds) {
-  var ads = [];
+function createArrAds(numberAds) {
+  var arrayAds = [];
 
-  for (var i = 0; i < numbAds; i++) {  
-    ads[i] = createAd(i);
+  for (var i = 0; i < numberAds; i++) {
+    arrayAds[i] = createAd(i);
   }
 
-  return ads;
+  return arrayAds;
 }
 
 function createAd(i) {
@@ -184,13 +184,13 @@ function translateType(type) {
   var value = '';
 
   switch (type) {
-    case 'flat': 
+    case 'flat':
       value = types[0];
       break;
-    case 'house': 
+    case 'house':
       value = types[1];
       break;
-    case 'bungalo': 
+    case 'bungalo':
       value = types[2];
       break;
   }
@@ -220,6 +220,6 @@ function getChecks() {
   return checkTime;
 }
 
-function getLocation (min, max) {
+function getLocation(min, max) {
   return getRandom(min, max);
 }
