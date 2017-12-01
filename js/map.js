@@ -42,7 +42,6 @@ function renderCardAd(ad, template) {
     switch (ad.offer.features[i]) {
       case 'wifi':
         liElement.classList.add('feature--wifi');
-        
         break;
       case 'dishwasher':
         liElement.classList.add('feature--dishwasher');
