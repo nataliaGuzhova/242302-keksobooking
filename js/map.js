@@ -42,29 +42,25 @@ function renderCardAd(ad, template) {
     switch (ad.offer.features[i]) {
       case 'wifi':
         liElement.classList.add('feature--wifi');
-        сardTemplate.querySelector('.popup__features').appendChild(liElement);
+        
         break;
       case 'dishwasher':
         liElement.classList.add('feature--dishwasher');
-        сardTemplate.querySelector('.popup__features').appendChild(liElement);
         break;
       case 'parking':
         liElement.classList.add('feature--parking');
-        сardTemplate.querySelector('.popup__features').appendChild(liElement);
         break;
       case 'washer':
         liElement.classList.add('feature--washer');
-        сardTemplate.querySelector('.popup__features').appendChild(liElement);
         break;
       case 'elevator':
         liElement.classList.add('feature--elevator');
-        сardTemplate.querySelector('.popup__features').appendChild(liElement);
         break;
       case 'conditioner':
         liElement.classList.add('feature--conditioner');
-        сardTemplate.querySelector('.popup__features').appendChild(liElement);
         break;
     }
+    сardTemplate.querySelector('.popup__features').appendChild(liElement);
   }
 
   сardTemplate.querySelector('ul + p').TextContent = ad.offer.description;
