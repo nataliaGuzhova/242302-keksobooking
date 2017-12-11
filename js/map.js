@@ -76,6 +76,8 @@ function closePopupOnKeyboard() {
 
 function openPopupCardAd(evt) {
   var elem = evt.target.parentNode;
+  var avatarNumber = 1;
+
   removeActiveFlag();
   closePopup();
 
@@ -83,9 +85,15 @@ function openPopupCardAd(evt) {
     elem.classList.add('map__pin--active');
   }
 
-  createCardAd(ads[getRandom(0, ads.length - 1)], map);
-  elem.addEventListener('keydown', onButtonCloseEsc);
-  elem.addEventListener('keydown', onButtonCloseEnter);
+  if (elem.hasAttribute('data-userNumber')) {
+    avatarNumber = parseInt(elem.getAttribute('data-userNumber'), 10);
+  }
+
+  if (!elem.classList.contains('map__pin--main')) {
+    createCardAd(ads[avatarNumber - 1], map);
+    elem.addEventListener('keydown', onButtonCloseEsc);
+    elem.addEventListener('keydown', onButtonCloseEnter);
+  }
 }
 
 function closePopupCardAd(evt) {
@@ -163,7 +171,7 @@ function renderCardAd(ad, template) {
     сardTemplate.querySelector('.popup__features').appendChild(liElement);
   }
 
-  сardTemplate.querySelector('ul + p').TextContent = ad.offer.description;
+  сardTemplate.querySelector('ul + p').textContent = ad.offer.description;
   сardTemplate.querySelector('.popup__avatar').src = ad.author.avatar;
 
   return сardTemplate;
@@ -174,13 +182,13 @@ function createMapPins(arrAds) {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < arrAds.length; i++) {
-    fragment.appendChild(renderMapPin(arrAds[i]));
+    fragment.appendChild(renderMapPin(arrAds[i], i));
   }
 
   canvas.appendChild(fragment);
 }
 
-function renderMapPin(ad) {
+function renderMapPin(ad, userNumber) {
   var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
   var mapPinElement = mapPinTemplate.cloneNode(true);
 
@@ -191,6 +199,7 @@ function renderMapPin(ad) {
 
   // для задания на обработку событий добавляем табиндекс
   mapPinElement.setAttribute('tabindex', '0');
+  mapPinElement.setAttribute('data-userNumber', (userNumber + 1).toString());
 
   return mapPinElement;
 }
@@ -220,7 +229,7 @@ function createAd(i) {
       'y': getLocation(minY, maxY),
     },
     'offer': {
-      'title': getTitle(i),
+      'title': getTitle(),
       'price': getPrice(),
       'type': getType(),
       'rooms': getRooms(),
@@ -260,7 +269,7 @@ function getFeatures() {
 function getTitle() {
   var titles = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 
-  return titles[getRandom(0, titles.length - 1)];
+  return titles[getRandom(0, titles.length - 1)].toString();
 }
 
 function getPrice() {
