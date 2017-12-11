@@ -1,21 +1,130 @@
 'use strict';
 
+
+// В момент открытия, страница должна находиться в следующем состоянии: карта затемнена
+// (добавлен класс map--faded) и форма неактивна
+//  (добавлен класс notice__form--disabled и все поля формы недоступны, disabled)
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
+var mapPinMain = document.querySelector('.map__pin--main');
+var noticeForm = document.querySelector('.notice__form');
+var map = document.querySelector('.map');
 var numbAds = 8;
+var mapCardTemplate = document.querySelector('template').content.querySelector('.map__card');
 var ads = createArrAds(numbAds);
 
-var map = document.querySelector('.map');
-map.classList.remove('map--faded');
+mapPinMain.addEventListener('mouseup', onMapPinMouseup);
 
-createMapPins(ads);
+// module4-tak1
+function onMapPinMouseup() {
+  map.classList.remove('map--faded');
+  noticeForm.classList.remove('notice__form--disabled');
 
-var mapCardTemplate = document.querySelector('template').content.querySelector('.map__card');
-createCardAd(ads[getRandom(0, ads.length - 1)], map);
+  createMapPins(ads);
+  var mapPins = document.querySelectorAll('.map__pin');
 
+  for (var i = 0; i < mapPins.length; i++) {
+    mapPins[i].addEventListener('click', onMapPinClick);
+    mapPins[i].addEventListener('keydown', onMapPinEnter);
+  }
+}
+
+document.addEventListener('click', onButtonCloseClick);
+
+// Первым шагом отключите показ по умолчанию первой карточки из набора объявлений
+// При нажатии на любой из элементов .map__pin ему должен добавляться класс
+// map__pin--active и должен показываться элемент .popup
+// Если до этого у другого элемента существовал класс pin--active,
+// то у этого элемента класс нужно убрать
+// При нажатии на элемент .popup__close карточка объявления должна скрываться.
+// При этом должен деактивироваться элемент .map__pin, который был помечен
+// как активный
+
+function onMapPinClick(evt) {
+  openPopupCardAd(evt);
+}
+
+function onMapPinEnter(evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    openPopupCardAd(evt);
+  }
+}
+
+function onButtonCloseClick(evt) {
+  var target = evt.target;
+  if (target.tagName === 'BUTTON' && target.className === 'popup__close') {
+    closePopupCardAd(evt);
+  }
+}
+
+function onButtonCloseEsc(evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closePopupOnKeyboard();
+  }
+}
+
+function onButtonCloseEnter(evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    closePopupOnKeyboard();
+  }
+}
+
+function closePopupOnKeyboard() {
+  hideElement(document.querySelector('article.popup:not(.hidden)'));
+  removeActiveFlag();
+}
+
+function openPopupCardAd(evt) {
+  var elem = evt.target.parentNode;
+  var avatarNumber = 1;
+
+  removeActiveFlag();
+  closePopup();
+
+  if (elem.tagName === 'BUTTON') {
+    elem.classList.add('map__pin--active');
+  }
+
+  if (elem.hasAttribute('data-userNumber')) {
+    avatarNumber = parseInt(elem.getAttribute('data-userNumber'), 10);
+  }
+
+  if (!elem.classList.contains('map__pin--main')) {
+    createCardAd(ads[avatarNumber - 1], map);
+    elem.addEventListener('keydown', onButtonCloseEsc);
+    elem.addEventListener('keydown', onButtonCloseEnter);
+  }
+}
+
+function closePopupCardAd(evt) {
+  hideElement(evt.target.parentNode);
+  removeActiveFlag();
+}
+
+function removeActiveFlag() {
+  var preventActiveElment = document.querySelector('.map__pin--active');
+  if (preventActiveElment) {
+    preventActiveElment.classList.remove('map__pin--active');
+  }
+}
+
+function closePopup() {
+  hideElement(document.querySelector('article.popup:not(.hidden)'));
+}
+
+function hideElement(element) {
+  if (element) {
+    element.classList.add('hidden');
+  }
+}
+
+// module3-tak1
 function createCardAd(ad, canvas) {
   var fragment = document.createDocumentFragment();
   var beforeElement = document.querySelector('.map__filters-container');
 
   fragment.appendChild(renderCardAd(ad, mapCardTemplate));
+  fragment.querySelector('.popup__close').setAttribute('tabindex', '0');
   canvas.insertBefore(fragment, beforeElement);
 }
 
@@ -62,7 +171,7 @@ function renderCardAd(ad, template) {
     сardTemplate.querySelector('.popup__features').appendChild(liElement);
   }
 
-  сardTemplate.querySelector('ul + p').TextContent = ad.offer.description;
+  сardTemplate.querySelector('ul + p').textContent = ad.offer.description;
   сardTemplate.querySelector('.popup__avatar').src = ad.author.avatar;
 
   return сardTemplate;
@@ -73,13 +182,13 @@ function createMapPins(arrAds) {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < arrAds.length; i++) {
-    fragment.appendChild(renderMapPin(arrAds[i]));
+    fragment.appendChild(renderMapPin(arrAds[i], i));
   }
 
   canvas.appendChild(fragment);
 }
 
-function renderMapPin(ad) {
+function renderMapPin(ad, userNumber) {
   var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
   var mapPinElement = mapPinTemplate.cloneNode(true);
 
@@ -87,6 +196,10 @@ function renderMapPin(ad) {
   mapPinElement.style.top = ad.location.y.toString() + 'px';
 
   mapPinElement.querySelector('img').src = ad.author.avatar;
+
+  // для задания на обработку событий добавляем табиндекс
+  mapPinElement.setAttribute('tabindex', '0');
+  mapPinElement.setAttribute('data-userNumber', (userNumber + 1).toString());
 
   return mapPinElement;
 }
@@ -116,7 +229,7 @@ function createAd(i) {
       'y': getLocation(minY, maxY),
     },
     'offer': {
-      'title': getTitle(i),
+      'title': getTitle(),
       'price': getPrice(),
       'type': getType(),
       'rooms': getRooms(),
@@ -156,7 +269,7 @@ function getFeatures() {
 function getTitle() {
   var titles = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 
-  return titles[getRandom(0, titles.length - 1)];
+  return titles[getRandom(0, titles.length - 1)].toString();
 }
 
 function getPrice() {
