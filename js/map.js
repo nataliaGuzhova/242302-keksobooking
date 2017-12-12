@@ -29,7 +29,13 @@ function onMapPinMouseup() {
   }
 
   noticeForm.addEventListener('change', syncInputs);
+  var submit = document.querySelector('.form__submit');
+  submit.addEventListener('click', validation);
 }
+
+
+// var btnSubmit = noticeForm.querySelector('.form__submit');
+// btnSubmit.addEventListener('click', validation(noticeForm));
 
 document.addEventListener('click', onButtonCloseClick);
 // module4-taks2. Автоматическая корректировка полей в форме.
@@ -143,6 +149,20 @@ function setDisabled(input, value) {
 
     for (var i = 0; i < value.length; i++) {
       input.options[value[i]].setAttribute('hidden', '');
+    }
+  }
+}
+// валидация формы объявления
+function validation() {
+  var inputs = noticeForm.elements;
+
+  for (var i = 0; i < inputs.length; i++) {
+    var input = inputs[i];
+
+    if (!input.checkValidity()) {
+      input.style.border = 'solid 2px rgb(255, 0, 0)';
+    } else {
+      input.style.border = 'none';
     }
   }
 }
