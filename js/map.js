@@ -27,7 +27,7 @@ function onMapPinMouseup() {
     mapPins[i].addEventListener('click', onMapPinClick);
     mapPins[i].addEventListener('keydown', onMapPinEnter);
   }
-  
+
   noticeForm.addEventListener('change', syncInputs);
 }
 
@@ -49,7 +49,7 @@ function syncInputs(evt) {
   var inputId = evt.target.id;
 
   switch (inputId) {
-    case 'timein': 
+    case 'timein':
     case 'timeout':
       syncTimeInOut(inputId, inputValue);
       break;
@@ -77,7 +77,7 @@ function syncTimeInOut(inputId, selectedTime) {
 
   var selector = '#' + timeId;
   var time = document.querySelector(selector);
-  time.value = selectedTime;  
+  time.value = selectedTime;
 }
 
 // Значение поля «Тип жилья» синхронизировано с минимальной ценой следующим образом:
@@ -94,18 +94,18 @@ function syncTypeHouseMinPrice(selectedTypeHouse) {
   var inputPrice = document.querySelector('#price');
 
   switch (selectedTypeHouse) {
-    case 'bungalo': 
-    inputPrice.min = '0';
-    break;
-  case 'flat': 
-    inputPrice.min = '1000';
-    break;
-  case 'house': 
-    inputPrice.min = '5000';
-    break;
-  case 'palace': 
-    inputPrice.min = '10000';
-    break;
+    case 'bungalo':
+      inputPrice.min = '0';
+      break;
+    case 'flat':
+      inputPrice.min = '1000';
+      break;
+    case 'house':
+      inputPrice.min = '5000';
+      break;
+    case 'palace':
+      inputPrice.min = '10000';
+      break;
   }
 }
 // Количество комнат связано с количеством гостей:
@@ -117,22 +117,22 @@ function syncRoomsGuests(selectedNumbRooms) {
   var guests = document.querySelector('#capacity');
 
   switch (selectedNumbRooms) {
-    case '1': 
-    guests.value = '1';
-    setDisabled(guests, [0, 1, 3]);
-    break;
-  case '2': 
-    guests.value = '2';
-    setDisabled(guests, [0, 3]);
-    break;
-  case '3': 
-    guests.value = '3';
-    setDisabled(guests, [3]);
-    break;
-  case '100': 
-    guests.value = '0';
-    setDisabled(guests, [0, 1, 2]);
-    break;
+    case '1':
+      guests.value = '1';
+      setDisabled(guests, [0, 1, 3]);
+      break;
+    case '2':
+      guests.value = '2';
+      setDisabled(guests, [0, 3]);
+      break;
+    case '3':
+      guests.value = '3';
+      setDisabled(guests, [3]);
+      break;
+    case '100':
+      guests.value = '0';
+      setDisabled(guests, [0, 1, 2]);
+      break;
   }
 }
 
@@ -141,10 +141,10 @@ function setDisabled(input, value) {
     for (var j = 0; j < input.options.length; j++) {
       input.options[j].removeAttribute('hidden', '');
     }
-    
+
     for (var i = 0; i < value.length; i++) {
       input.options[value[i]].setAttribute('hidden', '');
-    };
+    }
   }
 }
 // Первым шагом отключите показ по умолчанию первой карточки из набора объявлений
