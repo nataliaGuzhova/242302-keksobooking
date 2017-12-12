@@ -15,7 +15,7 @@ var ads = createArrAds(numbAds);
 
 mapPinMain.addEventListener('mouseup', onMapPinMouseup);
 
-// module4-tak1
+// module4-taks1
 function onMapPinMouseup() {
   map.classList.remove('map--faded');
   noticeForm.classList.remove('notice__form--disabled');
@@ -27,10 +27,126 @@ function onMapPinMouseup() {
     mapPins[i].addEventListener('click', onMapPinClick);
     mapPins[i].addEventListener('keydown', onMapPinEnter);
   }
+  
+  noticeForm.addEventListener('change', syncInputs);
 }
 
 document.addEventListener('click', onButtonCloseClick);
+// module4-taks2. Автоматическая корректировка полей в форме. 
+// При изменении одних полей, в других автоматически должны выставляться 
+// соответствующие значения. Зависимости полей выглядят следующим образом:
 
+
+// При изменении количества комнат должно автоматически меняться количество гостей, 
+// которых можно разместить. В обратную сторону синхронизацию делать не нужно
+// Форма должна отправляться на урл https://js.dump.academy/keksobooking методом POST
+//  с типом multipart/form-data
+// При отправке формы нужно проверить правильно ли заполнены поля и если какие-то поля
+//  заполнены неверно, то нужно выделить неверные поля красной рамкой
+
+function syncInputs(evt) {
+  var inputValue = evt.target.value;
+  var inputId = evt.target.id;
+
+  switch (inputId) {
+    case 'timein': 
+    case 'timeout':
+      syncTimeInOut(inputId, inputValue);
+      break;
+    case 'type':
+      syncTypeHouseMinPrice(inputValue);
+      break;
+    case 'room_number':
+      syncRoomsGuests(inputValue);
+      break;
+  }
+}
+// Поля «время заезда» и «время выезда» синхронизированы. 
+// При изменении одного из полей, значение второго автоматически 
+// выставляется точно таким же — например, если время заезда указано «после 14», 
+// то время выезда будет равно «до 14»
+
+function syncTimeInOut(inputId, selectedTime) {
+  var timeOut = 'timeout';
+  var timeIn = 'timein';
+  var timeId = timeIn;
+
+  if (inputId === timeIn) {
+    timeId = timeOut;
+  }
+
+  var selector = '#' + timeId;
+  var time = document.querySelector(selector);
+  time.value = selectedTime;  
+}
+
+// Значение поля «Тип жилья» синхронизировано с минимальной ценой следующим образом:
+// «Лачуга» — минимальная цена 0
+// «Квартира» — минимальная цена 1000
+// «Дом» — минимальная цена 5000
+// «Дворец» — минимальная цена 10000
+// С типом жилья должна синхронизироваться только минимальная цена, 
+// само значение поля при этом изменять не нужно. Если у пользователя введены данные,
+//  которые не подходят, эта проблема будет найдена на этапе валидации формы в момент
+//  отправки
+
+function syncTypeHouseMinPrice(selectedTypeHouse) {
+  var inputPrice = document.querySelector('#price');
+
+  switch (selectedTypeHouse) {
+    case 'bungalo': 
+    inputPrice.min = '0';
+    break;
+  case 'flat': 
+    inputPrice.min = '1000';
+    break;
+  case 'house': 
+    inputPrice.min = '5000';
+    break;
+  case 'palace': 
+    inputPrice.min = '10000';
+    break;
+  }
+}
+// Количество комнат связано с количеством гостей:
+// 1 комната — «для одного гостя»
+// 2 комнаты — «для 2-х или 1-го гостя»
+// 3 комнаты — «для 2-х, 1-го или 3-х гостей»
+// 100 комнат — «не для гостей»
+function syncRoomsGuests(selectedNumbRooms) {
+  var guests = document.querySelector('#capacity');
+
+  switch (selectedNumbRooms) {
+    case '1': 
+    guests.value = '1';
+    setDisabled(guests, [0, 1, 3]);
+    break;
+  case '2': 
+    guests.value = '2';
+    setDisabled(guests, [0, 3]);
+    break;
+  case '3': 
+    guests.value = '3';
+    setDisabled(guests, [3]);
+    break;
+  case '100': 
+    guests.value = '0';
+    setDisabled(guests, [0, 1, 2]);
+    break;
+  }
+}
+
+function setDisabled(input, value) {
+  if (input.tagName === 'SELECT') {
+    for (var j = 0; j < input.options.length; j++) {
+      input.options[j].removeAttribute('hidden', '');
+    }
+    
+    for (var i = 0; i < value.length; i++) {
+      input.options[value[i]].setAttribute('hidden', '');
+    };
+  }
+}
 // Первым шагом отключите показ по умолчанию первой карточки из набора объявлений
 // При нажатии на любой из элементов .map__pin ему должен добавляться класс
 // map__pin--active и должен показываться элемент .popup
