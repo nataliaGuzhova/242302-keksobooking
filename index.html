@@ -152,10 +152,10 @@
       <fieldset class="form__element">
         <label for="capacity">Количество мест</label>
         <select id="capacity" name="capacity">
-          <option value="3">для 3 гостей</option>
-          <option value="2">для 2 гостей</option>
+          <option value="3" hidden>для 3 гостей</option>
+          <option value="2" hidden>для 2 гостей</option>
           <option value="1" selected>для 1 гостя</option>
-          <option value="0">не для гостей</option>
+          <option value="0" hidden>не для гостей</option>
         </select>
       </fieldset>
 
@@ -244,6 +244,11 @@
 
   <button style="left: 200px; top: 400px;" class="map__pin"><img src="img/avatars/user07.png" width="40" height="40" draggable="false"></button>
 </template>
+<script src="js/constants.js"></script>
+<script src="js/data.js"></script>
 <script src="js/map.js"></script>
+<script src="js/pin.js"></script>
+<script src="js/card.js"></script>
+<script src="js/form.js"></script>
 </body>
 </html>
