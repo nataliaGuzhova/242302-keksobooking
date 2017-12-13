@@ -145,13 +145,13 @@
   }
 
   function onButtonCloseEsc(evt) {
-    if (evt.keyCode === ESC_KEYCODE) {
+    if (evt.keyCode === window.constants.esc) {
       closePopupOnKeyboard();
     }
   }
 
   function onButtonCloseEnter(evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
+    if (evt.keyCode === window.constants.enter) {
       closePopupOnKeyboard();
     }
   }

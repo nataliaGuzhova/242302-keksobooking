@@ -54,7 +54,7 @@
   }
 
   function onMapPinEnter(evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
+    if (evt.keyCode === window.constants.enter) {
       window.card.openCardAd(evt);
     }
   }
