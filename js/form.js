@@ -12,8 +12,16 @@
     validation:
       function (e) {
         validation(e);
+      },
+    showPinAdress:
+      function () {
+        setPinAddress();
       }
   };
+
+  function setPinAddress() {
+    noticeForm.querySelector('#address').value = 'x: ' + window.pin.x + ', y: ' + window.pin.y;
+  }
 
   function syncInputs(evt) {
     var inputValue = evt.target.value;
