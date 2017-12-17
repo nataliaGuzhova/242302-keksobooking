@@ -43,7 +43,7 @@
     evt.preventDefault();
 
     shift = {
-      // pageX координата относительно документа (с учетом прокрутки) 
+      // pageX координата относительно документа (с учетом прокрутки)
       x: evt.pageX - window.pin.x,
       y: evt.pageY - window.pin.y
     };
